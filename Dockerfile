@@ -39,4 +39,5 @@ RUN gradle build --no-daemon
 COPY config/neo4j.conf /etc/neo4j/neo4j.conf
 
 # Run the application and start Neo4j
-CMD gradle run && neo4j console
+# CMD gradle run && neo4j consoles
+CMD gradle run --no-daemon -Dorg.gradle.jvmargs="-Xmx2g" && neo4j console
