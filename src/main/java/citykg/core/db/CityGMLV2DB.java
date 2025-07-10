@@ -263,9 +263,17 @@ public class CityGMLV2DB extends CityKGDB {
     public BiConsumer<Node, Object> handleOriginXLink() {
         return (node, obj) -> {
             // Only accept nodes whose "object" has more than one incoming "object" edge
-            if (node.getSingleRelationship(EdgeTypes.object, Direction.OUTGOING).getEndNode()
-                    .getRelationships(Direction.INCOMING, EdgeTypes.object)
-                    .stream().count() <= 1) return;
+            Relationship rel = node.getSingleRelationship(EdgeTypes.object, Direction.OUTGOING);
+            if (rel == null) {
+                logger.warn("Node {} has no OUTGOING 'object' relationship, skipping", node.getElementId());
+                return;
+            }
+
+            Node endNode = rel.getEndNode();
+            long incomingCount = endNode.getRelationships(Direction.INCOMING, EdgeTypes.object).stream().count();
+            if (incomingCount <= 1) return;
+
+            
             if (obj instanceof AssociationByRepOrRef<?> xlink) {
                 if (xlink.getObject() instanceof AbstractGML child) {
                     xlink.setHref("#" + child.getId());
