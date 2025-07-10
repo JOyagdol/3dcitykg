@@ -35,25 +35,13 @@ public class GraphUtils {
             Relationship relUpperCorner = envelope.getSingleRelationship(EdgeTypes.upperCorner, Direction.OUTGOING);
             if (relLowerCorner == null || relUpperCorner == null) return null;
 
-            Node lowerCornerValue = relLowerCorner.getEndNode().getSingleRelationship(EdgeTypes.value, Direction.OUTGOING);
-            if (lowerCornerValue == null) return null;
+            Node lowerCorner = relLowerCorner.getEndNode()
+                .getSingleRelationship(EdgeTypes.value, Direction.OUTGOING).getEndNode()
+                .getSingleRelationship(EdgeTypes.elementData, Direction.OUTGOING).getEndNode();
 
-            Node lowerCornerValueNode = lowerCornerValue.getEndNode();
-            Relationship lowerElementDataRel = lowerCornerValueNode.getSingleRelationship(EdgeTypes.elementData, Direction.OUTGOING);
-            if (lowerElementDataRel == null) return null;
-
-            Node lowerCorner = lowerElementDataRel.getEndNode();
-
-            Node upperCornerValue = relUpperCorner.getEndNode()
-                .getSingleRelationship(EdgeTypes.value, Direction.OUTGOING);
-            if (upperCornerValue == null) return null;
-
-            Node upperCornerValueNode = upperCornerValue.getEndNode();
-            Relationship upperElementDataRel = upperCornerValueNode.getSingleRelationship(EdgeTypes.elementData, Direction.OUTGOING);
-            if (upperElementDataRel == null) return null;
-
-            Node upperCorner = upperElementDataRel.getEndNode();
-            
+            Node upperCorner = relUpperCorner.getEndNode()
+                .getSingleRelationship(EdgeTypes.value, Direction.OUTGOING).getEndNode()
+                .getSingleRelationship(EdgeTypes.elementData, Direction.OUTGOING).getEndNode();
             // TODO Compare classes Envelope and DirectPosition in CityGMl v2 and v3 here
             double iminX = Double.parseDouble(lowerCorner.getProperty(PropNames.ARRAY_MEMBER + "[0]").toString());
             double iminY = Double.parseDouble(lowerCorner.getProperty(PropNames.ARRAY_MEMBER + "[1]").toString());

@@ -24,7 +24,7 @@ RUN wget -O - https://debian.neo4j.com/neotechnology.gpg.key | gpg --dearmor -o 
 WORKDIR /home/gradle/src
 
 # Clone the repository
-RUN git clone https://github.com/tum-gis/3dcitykg
+RUN git clone https://github.com/JOyagdol/3dcitykg
 
 # Change to project directory
 WORKDIR /home/gradle/src/3dcitykg
