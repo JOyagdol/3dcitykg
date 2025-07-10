@@ -23,17 +23,37 @@ public class GraphUtils {
             if (!abstractCityObjectNode.hasRelationship(Direction.OUTGOING, EdgeTypes.boundedBy)) {
                 return null;
             }
-            Node envelope = abstractCityObjectNode
-                    .getSingleRelationship(EdgeTypes.boundedBy, Direction.OUTGOING).getEndNode()
-                    .getSingleRelationship(EdgeTypes.envelope, Direction.OUTGOING).getEndNode();
-            Node lowerCorner = envelope
-                    .getSingleRelationship(EdgeTypes.lowerCorner, Direction.OUTGOING).getEndNode()
-                    .getSingleRelationship(EdgeTypes.value, Direction.OUTGOING).getEndNode()
-                    .getSingleRelationship(EdgeTypes.elementData, Direction.OUTGOING).getEndNode();
-            Node upperCorner = envelope
-                    .getSingleRelationship(EdgeTypes.upperCorner, Direction.OUTGOING).getEndNode()
-                    .getSingleRelationship(EdgeTypes.value, Direction.OUTGOING).getEndNode()
-                    .getSingleRelationship(EdgeTypes.elementData, Direction.OUTGOING).getEndNode();
+            Relationship relBoundedBy = abstractCityObjectNode.getSingleRelationship(EdgeTypes.boundedBy, Direction.OUTGOING);
+            if (relBoundedBy == null) return null;
+            Node boundedByNode = relBoundedBy.getEndNode();
+
+            Relationship relEnvelope = boundedByNode.getSingleRelationship(EdgeTypes.envelope, Direction.OUTGOING);
+            if (relEnvelope == null) return null;
+            Node envelope = relEnvelope.getEndNode();
+
+            Relationship relLowerCorner = envelope.getSingleRelationship(EdgeTypes.lowerCorner, Direction.OUTGOING);
+            Relationship relUpperCorner = envelope.getSingleRelationship(EdgeTypes.upperCorner, Direction.OUTGOING);
+            if (relLowerCorner == null || relUpperCorner == null) return null;
+
+            Node lowerCornerValue = relLowerCorner.getEndNode().getSingleRelationship(EdgeTypes.value, Direction.OUTGOING);
+            if (lowerCornerValue == null) return null;
+
+            Node lowerCornerValueNode = lowerCornerValue.getEndNode();
+            Relationship lowerElementDataRel = lowerCornerValueNode.getSingleRelationship(EdgeTypes.elementData, Direction.OUTGOING);
+            if (lowerElementDataRel == null) return null;
+
+            Node lowerCorner = lowerElementDataRel.getEndNode();
+
+            Node upperCornerValue = relUpperCorner.getEndNode()
+                .getSingleRelationship(EdgeTypes.value, Direction.OUTGOING);
+            if (upperCornerValue == null) return null;
+
+            Node upperCornerValueNode = upperCornerValue.getEndNode();
+            Relationship upperElementDataRel = upperCornerValueNode.getSingleRelationship(EdgeTypes.elementData, Direction.OUTGOING);
+            if (upperElementDataRel == null) return null;
+
+            Node upperCorner = upperElementDataRel.getEndNode();
+            
             // TODO Compare classes Envelope and DirectPosition in CityGMl v2 and v3 here
             double iminX = Double.parseDouble(lowerCorner.getProperty(PropNames.ARRAY_MEMBER + "[0]").toString());
             double iminY = Double.parseDouble(lowerCorner.getProperty(PropNames.ARRAY_MEMBER + "[1]").toString());

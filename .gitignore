@@ -23,7 +23,7 @@ gradle-app.setting
 build
 
 # CityGML Input data
-input/citygml/SMARTCITY_LAB_(RV2024)_mod_room_noIfcFooting_window_metadata-manual-georeferenced-geomFixDynamic.gml
+input/citygml/
 
 # CityGML Output data
 output/
