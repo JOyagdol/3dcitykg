@@ -27,3 +27,6 @@ input/citygml/
 
 # CityGML Output data
 output/
+
+# .vscode settings
+.vscode/

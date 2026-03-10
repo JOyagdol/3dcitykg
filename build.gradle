@@ -157,7 +157,9 @@ publishing {
     }
 }
 
-mainClassName = 'citykg/app/CityKG'
+application {
+    mainClass = 'citykg.app.CityKG'
+}
 
 shadowJar {
     archiveBaseName.set('3dcitykg')
